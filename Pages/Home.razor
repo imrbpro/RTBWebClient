@@ -1,0 +1,61 @@
+﻿@page "/"
+@using RTBWebClient.Components
+@using RTBWebClient.Enums
+@using RTBWebClient.Models
+@using RTBWebClient.Services
+@inject SignalRService SignalRService
+
+<h3 class="h3 mt-2">AIM Task Board</h3>
+<p> @members Members</p>
+<div class="row mt-4">
+    <BoardColumn Title="New Tasks"
+                 ItemType="ItemType.New"
+                 Items="taskItems"
+                 OnAddItem="Add" />
+
+    <BoardColumn Title="Active Tasks"
+                 ItemType="ItemType.Active"
+                 Items="taskItems"
+                 OnAddItem="Add" />
+
+    <BoardColumn Title="Completed Tasks"
+                 ItemType="ItemType.Completed"
+                 Items="taskItems"
+                 OnAddItem="Add" />
+</div>
+
+@code {
+    int members;
+    private List<TaskItem> taskItems = new List<TaskItem>();
+
+    private async void Add(TaskItem item)
+    {
+        await SignalRService.SendMessage(item);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        SignalRService.OnUpdateMemberCount += OnUpdateMemberCount;
+        SignalRService.OnTaskItemReceived += OnTaskItemReceived;
+        await SignalRService.StartConnection();
+    }
+
+    void OnUpdateMemberCount(int count)
+    {
+        members = count;
+        StateHasChanged();
+    }
+
+    void OnTaskItemReceived(TaskItem item)
+    {
+        taskItems.Add(item);
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        SignalRService.OnTaskItemReceived -= OnTaskItemReceived;
+        SignalRService.OnUpdateMemberCount -= OnUpdateMemberCount;
+        await SignalRService.DisposeAsync();
+    }
+}

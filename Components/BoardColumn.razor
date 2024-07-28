@@ -1,0 +1,26 @@
+@using RTBWebClient.Enums
+@using RTBWebClient.Models
+<div class="col-3 border rounded m-1 bg-light-subtle">
+    <h4 class="h4 my-2">@Title</h4>
+    <ItemForm ItemType="@ItemType" OnAddItem="AddItemAsync" />
+    <ItemList Items="Items.Where(i => i.Type == ItemType).OrderByDescending(i => i.CreatedAt)" />
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public ItemType ItemType { get; set; }
+
+    [Parameter]
+    public List<TaskItem> Items { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<TaskItem> OnAddItem { get; set; }
+
+    private async Task AddItemAsync(TaskItem item)
+    {
+        await OnAddItem.InvokeAsync(item);
+    }
+}
