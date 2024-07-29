@@ -2,7 +2,7 @@
 @using RTBWebClient.Models
 ﻿<div class="form-group">
     <textarea class="form-control" rows="2" @bind="description" placeholder="Enter a new item"></textarea>
-    <button class="btn btn-primary my-1" @onclick="AddItem">Add</button>
+    <button class="btn my-1" @onclick="AddItem" style="background-color:@Color !important; color:white !important; ">Add</button>
 </div>
 
 @code {
@@ -14,6 +14,8 @@
     [Parameter]
     public EventCallback<TaskItem> OnAddItem { get; set; }
 
+    [Parameter]
+    public string Color { get; set; } = string.Empty;
     async Task AddItem()
     {
         if (string.IsNullOrEmpty(description)) return;

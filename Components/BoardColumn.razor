@@ -1,8 +1,8 @@
 @using RTBWebClient.Enums
 @using RTBWebClient.Models
-<div class="col-3 border rounded m-1 bg-light-subtle">
-    <h4 class="h4 my-2">@Title</h4>
-    <ItemForm ItemType="@ItemType" OnAddItem="AddItemAsync" />
+<div class="col-3 border rounded m-1 bg-light-subtle" style="border:1px solid @Color !important">
+    <h4 class="h4 my-2" style="color: @Color !important">@Title</h4>
+    <ItemForm ItemType="@ItemType" OnAddItem="AddItemAsync" Color="@Color" />
     <ItemList Items="Items.Where(i => i.Type == ItemType).OrderByDescending(i => i.CreatedAt)" />
 </div>
 
@@ -19,6 +19,8 @@
     [Parameter]
     public EventCallback<TaskItem> OnAddItem { get; set; }
 
+    [Parameter]
+    public string Color { get; set; } = string.Empty;
     private async Task AddItemAsync(TaskItem item)
     {
         await OnAddItem.InvokeAsync(item);

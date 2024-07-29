@@ -5,23 +5,27 @@
 @using RTBWebClient.Services
 @inject SignalRService SignalRService
 
-<h3 class="h3 mt-2">AIM Task Board</h3>
+<center><h3 class="h3 mt-2">Architecture in Motion | Task Board</h3></center>
+<hr />
 <p> @members Members</p>
-<div class="row mt-4">
+<div class="row mt-4 p-4">
     <BoardColumn Title="New Tasks"
                  ItemType="ItemType.New"
                  Items="taskItems"
-                 OnAddItem="Add" />
+                 OnAddItem="Add"
+                 Color="red"/>
 
     <BoardColumn Title="Active Tasks"
                  ItemType="ItemType.Active"
                  Items="taskItems"
-                 OnAddItem="Add" />
+                 OnAddItem="Add"
+                 Color="blue"/>
 
     <BoardColumn Title="Completed Tasks"
                  ItemType="ItemType.Completed"
                  Items="taskItems"
-                 OnAddItem="Add" />
+                 OnAddItem="Add"
+                 Color="green"/>
 </div>
 
 @code {
